@@ -1,0 +1,40 @@
+start => ("chrome", "C:/Browserdriver/chromedriver.exe")
+wait = 5
+website = "https://www.google.com/"
+button = "to Click"
+$visit => (website)
+$get_element_by_name => ("q", button)
+$write => (button, "JavaScript")
+$sleep => ((((wait + 1 - wait)*2)/2)*5)
+$get_element_by_class => ("LC20lb", "link")
+$click => ("link", index->2)
+$sleep => (wait)
+$close => ()
+
+every time in 3 times
+  visit => ("https://www.python.org/")
+  get_element_by_link_text => ("absolute", "Become a Member", index -> button)
+  click => (button)
+  sleep => (current+2)
+  get_element_by_id => ("id_login", "username")
+  write => ("username", "ameerShah@gmail.com", enter->false)
+  get_element_by_id => ("id_password", "password")
+  write => ("password", "helloameer", enter->false)
+  get_element_by_class => ("primaryAction", "submit")
+  click => ("submit")
+  sleep => (current+2)
+end
+close => ()
+
+$visit => ("https://www.python.org/")
+$get_element_by_id => ("start-shell", "shell")
+$click => ("shell")
+$sleep => (60)
+$action_initialize => ()
+$text_action => ("print(10)")
+$action_perform => ()
+$sleep => (wait)
+$close => ()
+$visit => https://www.google.com/
+$$get_element_by_name => q, google_search
+$$$write => google_search, PyCon

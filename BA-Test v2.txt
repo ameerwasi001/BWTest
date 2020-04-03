@@ -1,0 +1,25 @@
+statements : NEWLINE* expr (NEWLINE+ expr)* NEWLINE+
+
+statement : KEYWORD:restart | KEYWORD:stop | expr
+
+expr : IDENTIFIER EQ expr
+     : comp-expr ((OR|AND) comp-expr)
+
+comp-expr : NOT comp-expr
+	  : arith-expr ((EE|NE|LT|GT|GTE|LTE) arith-expr)
+
+arith-expr : term ((PLUS|MINUS) term)*
+
+term : factor ((MUL|DIV) factor)*
+
+factor : (PLUS|MINUS)? NUMBER | RPAREN expr LPAREN | IDENTIFIER | STRING
+
+if-expr : KEYWORD:IF expr KEYWORD:THEN expr
+	  (KEYWORD:ELSEIF expr KEYWORD:THEN expr)*
+ 	  (KEYWORD:ELSE expr)?
+
+while-expr : KEYWORD:WHILE expr NEWLINE statements KEYWORD:END
+
+call-expr : IDENTIFIER DARROW RPAREN (expr | IDENTIFIER SARROW expr COMMA)* LPAREN
+
+every-expr : KEYWORD:every KEYWORD:time KEYWORD:in expr KEYWORD:times (expr | statements KEYWORD:end)
