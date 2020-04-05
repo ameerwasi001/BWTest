@@ -37,10 +37,14 @@ class Lexer:
     def make_number(self):
         number_str = ""
         pos_start = self.pos.copy()
+        e_count = 0
         dot_count = 0
-        while (self.current_char != None) and (self.current_char in DIGITS+"."):
+        while (self.current_char != None) and (self.current_char in DIGITS+"."+"e"):
             if self.current_char == ".": dot_count+=1
+            if self.current_char == "e": e_count+=1
             if dot_count == 2: break
+            if e_count == 2: break
+            if (dot_count == 1) and (e_count == 1): break
             number_str += self.current_char
             self.advance()
         return Token(TT_NUMBER, number_str, pos_start, self.pos)
