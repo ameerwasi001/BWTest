@@ -43,7 +43,9 @@ KEYWORDS = [
 "in",
 "times",
 "restart",
-"stop"
+"stop",
+"try",
+"except"
 ]
 
 class Token:
