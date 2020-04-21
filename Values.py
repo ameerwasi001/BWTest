@@ -1,3 +1,5 @@
+from Errors import *
+
 class Value:
     def __init__(self):
         self.set_pos()
