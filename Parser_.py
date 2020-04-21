@@ -297,10 +297,57 @@ class Parser:
             expr = res.register(self.every_expr())
             if res.error: return res
             return res.success(expr)
+        elif self.current_tok.matches(TT_KEYWORD, 'try'):
+            expr = res.register(self.try_expr())
+            if res.error: return res
+            return res.success(expr)
         return res.failure(InvalidSyntaxError(
             pos_start, self.current_tok.pos_end,
             "Expected NUMBER, IDENTIFIER, or '('"
         ))
+
+    def try_expr(self):
+        res = ParseResult()
+        pos_start = self.current_tok.pos_start.copy()
+        if not self.current_tok.matches(TT_KEYWORD, "try"):
+            return res.failure(InvalidSyntaxError(
+                pos_start, self.current_tok.pos_end,
+                "Expected NUMBER, 'try'"
+            ))
+        res.register_advancement()
+        self.advance()
+        if self.current_tok.type == TT_NEWLINE:
+            try_block = res.register(self.statements())
+            if res.error: return res
+            if not self.current_tok.matches(TT_KEYWORD, "except"):
+                return res.failure(InvalidSyntaxError(
+                    pos_start, self.current_tok.pos_end,
+                    "Expected 'except'"
+                ))
+            res.register_advancement()
+            self.advance()
+            except_block = res.register(self.statements())
+            if res.error: return res
+            if not self.current_tok.matches(TT_KEYWORD, "end"):
+                return res.failure(InvalidSyntaxError(
+                    pos_start, self.current_tok.pos_end,
+                    "Expected 'end'"
+                ))
+            res.register_advancement()
+            self.advance()
+            return res.success(TryNode(try_block, except_block, False, pos_start, self.current_tok.pos_end))
+        try_block = res.register(self.expr())
+        if res.error: return res
+        if not self.current_tok.matches(TT_KEYWORD, "except"):
+            return res.failure(InvalidSyntaxError(
+                pos_start, self.current_tok.pos_end,
+                "Expected 'except'"
+            ))
+        res.register_advancement()
+        self.advance()
+        except_block = res.register(self.expr())
+        if res.error: return res
+        return res.success(TryNode(try_block, except_block, True, pos_start, self.current_tok.pos_end))
 
     def every_expr(self):
         res = ParseResult()
