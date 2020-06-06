@@ -1,7 +1,7 @@
 # BWTest
 BWTest is the successor of [BA-Test](https://github.com/ameerwasi001/BA-Test) a framework used for testing browser based applications
 
-This time BA-Test has been improved to include an actual parser, interpreter, and Lexer that interface directly with python preserving it's strength of modulability.
+This time BA-Test has been improved to include an actual parser, interpreter, and Lexer that interface directly with python preserving it's strength of modulability. It can also be compiled to Python with [BWTst Compiler](https://github.com/ameerwasi001/BWTst-Compiler).
 
 # Supported Browsers
 It supports every browser that selenium supports meaning Firefox, Chrome, Safari, Edge and Internet Explorer 3 and drivers for all of them will be required.
